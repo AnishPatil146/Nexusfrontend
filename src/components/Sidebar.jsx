@@ -1,32 +1,27 @@
-import { Link, useLocation } from "react-router-dom"
+import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
-    const location = useLocation()
-
-    const linkClass = (path) =>
-        `block px-2 py-1 rounded ${location.pathname === path
-            ? "bg-gray-800 text-white"
-            : "text-gray-300 hover:text-white"
-        }`
-
     return (
-        <div className="w-64 min-h-screen bg-black text-white p-5">
-            <h1 className="text-2xl font-bold mb-8">AI CRM</h1>
+        <div className="w-64 bg-black text-white min-h-screen p-4">
+            <h1 className="text-xl font-bold mb-6">AI CRM</h1>
 
-            <ul className="space-y-4">
-                <li>
-                    <Link to="/dashboard" className={linkClass("/dashboard")}>
-                        Dashboard
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/leads" className={linkClass("/leads")}>
-                        Leads
-                    </Link>
-                </li>
-                <li className="text-gray-300">Automation</li>
-                <li className="text-gray-300">Settings</li>
-            </ul>
+            <nav className="space-y-3">
+                <NavLink to="/dashboard" className="block hover:text-blue-400">
+                    Dashboard
+                </NavLink>
+
+                <NavLink to="/leads" className="block hover:text-blue-400">
+                    Leads
+                </NavLink>
+
+                <NavLink to="/automation" className="block hover:text-blue-400">
+                    Automation
+                </NavLink>
+
+                <NavLink to="/settings" className="block hover:text-blue-400">
+                    Settings
+                </NavLink>
+            </nav>
         </div>
-    )
+    );
 }
