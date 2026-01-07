@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import API from "../services/api"
 import { Bar, Pie } from "react-chartjs-2"
+import Sidebar from "../components/Sidebar"
+import Navbar from "../components/Navbar"
 
 export default function ManagerDashboard() {
     const [dashboard, setDashboard] = useState(null)

@@ -2,6 +2,9 @@ import { useEffect, useState } from "react"
 import API from "../services/api"
 import socket from "../services/socket"
 import { Pie } from "react-chartjs-2"
+import MonthlyPerformanceChart from "../components/MonthlyPerformanceChart"
+import Sidebar from "../components/Sidebar"
+import Navbar from "../components/Navbar"
 
 export default function LeadsAnalytics() {
     const [data, setData] = useState(null)

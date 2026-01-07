@@ -1,5 +1,5 @@
-import Sidebar from "../components/Sidebar"
-import Navbar from "../components/Navbar"
+import Sidebar from "../components/Sidebar.jsx"
+import Navbar from "../components/Navbar.jsx"
 import StatCard from "../components/StatCard.jsx"
 
 export default function Dashboard() {
