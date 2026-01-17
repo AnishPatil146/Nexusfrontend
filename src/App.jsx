@@ -1,6 +1,6 @@
 import { HashRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/login"; // ⚠️ CHECK CASE
 
-import Login from "./pages/login";
 import Dashboard from "./pages/Dashboard";
 import Leads from "./pages/Leads";
 import Automation from "./pages/Automation";
