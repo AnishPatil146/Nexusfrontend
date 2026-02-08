@@ -8,9 +8,7 @@ import { NotificationProvider } from "./auth/NotificationContext";
 import { ToastProvider } from "./auth/ToastContext";
 
 // --- COMPONENTS ---
-import Login from "./pages/Login";
-import Layout from "./components/Layout";
-import RoleRoute from "./components/RoleRoute";
+import Login from "./pages/LoginPage";
 
 // --- PAGES ---
 import Team from "./pages/Team";
