@@ -1,8 +1,8 @@
-import Layout from "./components/Layout.js";
+import Layout from "./components/Layout.jsx";
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-
+import RoleRoute from "./components/RoleRoute"; // Path check kar lena sahi hai ya nahi
 // --- CONTEXTS (State) ---
 import { AuthProvider, useAuth } from "./auth/AuthContext"; // 👈 Fixed Import
 import { NotificationProvider } from "./auth/NotificationContext";
