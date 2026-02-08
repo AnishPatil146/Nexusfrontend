@@ -1,15 +1,17 @@
-import axios from "axios"
+const API_BASE =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api";
 
-const API = axios.create({
-    baseURL: "https://performancecrm-backend.onrender.com"
-})
+export async function apiGet(path, token) {
+    const res = await fetch(`${API_BASE}${path}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+    });
 
-API.interceptors.request.use((req) => {
-    const token = localStorage.getItem("token")
-    if (token) {
-        req.headers.Authorization = `Bearer ${token}`
+    if (!res.ok) {
+        throw new Error("API Error");
     }
-    return req
-})
 
-export default API
+    return res.json();
+}

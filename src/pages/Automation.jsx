@@ -1,3 +1,14 @@
+import Sidebar from "../components/sidebar.jsx"
+import Navbar from "../components/Navbar"
+
 export default function Automation() {
-    return <h1 className="text-2xl p-6">Automation – Coming Soon</h1>;
+    return (
+        <div className="flex">
+            <Sidebar />
+            <div className="flex-1">
+                <Navbar />
+                <div className="p-6 text-xl">Automation Page</div>
+            </div>
+        </div>
+    )
 }

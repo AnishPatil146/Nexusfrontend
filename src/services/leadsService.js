@@ -1,19 +1,27 @@
-import API from "./api"
+import axios from "axios"
 
-/* GET */
+const API = import.meta.env.VITE_API_BASE_URL
+
 export const getLeads = async () => {
-    const res = await API.get("/leads")
-    return res.data.leads
-}
+    const token = localStorage.getItem("token")
 
-/* CREATE */
-export const createLead = async (data) => {
-    const res = await API.post("/leads", data)
+    const res = await axios.get(`${API}/leads`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+
     return res.data
 }
 
-/* UPDATE */
-export const updateLead = async (id, data) => {
-    const res = await API.put(`/leads/${id}`, data)
+export const createLead = async (leadData) => {
+    const token = localStorage.getItem("token")
+
+    const res = await axios.post(`${API}/leads`, leadData, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+
     return res.data
 }

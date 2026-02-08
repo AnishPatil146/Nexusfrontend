@@ -1,106 +1,57 @@
-import { useEffect, useState } from "react"
-import { createLead, updateLead } from "../services/leadsService"
+import { useState } from "react"
+import { createLead } from "../services/leadsService"
 
-export default function LeadModal({ lead, onClose, onSaved }) {
-    const isEdit = Boolean(lead)
-
+export default function LeadModal({ open, onClose, onSuccess }) {
     const [form, setForm] = useState({
         name: "",
         email: "",
-        status: "New"
+        status: "New",
     })
 
-    useEffect(() => {
-        if (lead) {
-            setForm({
-                name: lead.name,
-                email: lead.email,
-                status: lead.status
-            })
-        }
-    }, [lead])
+    if (!open) return null
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-
-        if (isEdit) {
-            await updateLead(lead._id, form)
-        } else {
+    const submit = async () => {
+        try {
             await createLead(form)
+            onSuccess()
+            onClose()
+        } catch {
+            alert("Failed to create lead")
         }
-
-        onSaved()
-        onClose()
     }
 
-    const statusFlow = {
-        New: ["Contacted"],
-        Contacted: ["Qualified", "Lost"],
-        Qualified: ["Converted", "Lost"],
-        Converted: [],
-        Lost: []
-    }
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded w-96">
+                <h2 className="text-xl mb-4">Add Lead</h2>
 
-const availableStatuses = lead
-    ? statusFlow[lead.status]
-    : ["New"]
+                <input
+                    placeholder="Name"
+                    className="border p-2 w-full mb-2"
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                />
 
-return (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg w-96">
-                <h2 className="text-xl font-bold mb-4">
-                    {isEdit ? "Update Lead" : "Create Lead"}
-                </h2>
+                <input
+                    placeholder="Email"
+                    className="border p-2 w-full mb-2"
+                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                />
 
-                <form onSubmit={handleSubmit} className="space-y-3">
-                    <input
-                        placeholder="Name"
-                        className="w-full border p-2"
-                        value={form.name}
-                        onChange={(e) =>
-                            setForm({ ...form, name: e.target.value })
-                        }
-                        required
-                    />
+                <select
+                    className="border p-2 w-full mb-4"
+                    onChange={(e) => setForm({ ...form, status: e.target.value })}
+                >
+                    <option>New</option>
+                    <option>Converted</option>
+                    <option>Pending</option>
+                </select>
 
-                    <input
-                        placeholder="Email"
-                        className="w-full border p-2"
-                        value={form.email}
-                        onChange={(e) =>
-                            setForm({ ...form, email: e.target.value })
-                        }
-                        required
-                    />
-
-<select
-    className="w-full border p-2"
-    value={form.status}
-    onChange={(e) =>
-        setForm({ ...form, status: e.target.value })
-    }
->
-    {availableStatuses.map((status) => (
-        <option key={status}>{status}</option>
-    ))}
-</select>
-
-<div className="flex justify-end gap-2">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="px-4 py-2 border rounded"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            className="px-4 py-2 bg-blue-600 text-white rounded"
-                        >
-                            {isEdit ? "Update" : "Create"}
-                        </button>
-                    </div>
-                </form>
+                <div className="flex justify-end gap-2">
+                    <button onClick={onClose}>Cancel</button>
+                    <button onClick={submit} className="bg-blue-600 text-white px-4 py-2 rounded">
+                        Save
+                    </button>
+                </div>
             </div>
         </div>
     )
