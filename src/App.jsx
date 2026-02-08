@@ -9,7 +9,7 @@ import { ToastProvider } from "./auth/ToastContext";
 
 // --- COMPONENTS ---
 import Login from "./pages/LoginPage";
-import Layout from "./components/Layout"; // Path check kar lena sahi hai ya nahi
+import Layout from "./components/Layout.jsx";
 // --- PAGES ---
 import Team from "./pages/Team";
 import Performance from "./pages/Performance";
