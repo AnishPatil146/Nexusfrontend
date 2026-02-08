@@ -1,3 +1,4 @@
+import Layout from "./components/Layout";
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
@@ -9,7 +10,6 @@ import { ToastProvider } from "./auth/ToastContext";
 
 // --- COMPONENTS ---
 import Login from "./pages/LoginPage";
-import Layout from "./components/Layout.jsx";
 // --- PAGES ---
 import Team from "./pages/Team";
 import Performance from "./pages/Performance";
