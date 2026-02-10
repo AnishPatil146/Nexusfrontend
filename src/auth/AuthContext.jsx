@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
 
 const AuthContext = createContext();
 
@@ -8,42 +9,66 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    // Initialize user from localStorage
     useEffect(() => {
-        // Check local storage for existing session
-        const storedUser = localStorage.getItem("nexus_user");
-        if (storedUser) {
+        const storedUser = localStorage.getItem("user");
+        const token = localStorage.getItem("token");
+        if (storedUser && token) {
             setUser(JSON.parse(storedUser));
         }
         setLoading(false);
     }, []);
 
-    const login = (email, password) => {
-        // Mock Login Logic
-        let role = "employee";
-        let name = "Rahul Team";
+    // --- LOGIN FUNCTION (FIXED) ---
+    const login = async (emailOrData, password) => {
+        let email, pass;
 
-        if (email.includes("manager")) {
-            role = "manager";
-            name = "Ankita Patil";
-        } else if (email.includes("admin")) {
-            role = "admin";
-            name = "Anish CEO";
+        // Fix: Handle both (email, password) AND ({ email, password })
+        if (typeof emailOrData === "object" && emailOrData.email) {
+            email = emailOrData.email;
+            pass = emailOrData.password;
+        } else {
+            email = emailOrData;
+            pass = password;
         }
 
-        const userData = { email, role, name };
-        setUser(userData);
-        localStorage.setItem("nexus_user", JSON.stringify(userData));
-        return true;
+        try {
+            // API Call
+            const API_URL = import.meta.env.VITE_API_BASE_URL + "/auth/login";
+
+            const res = await axios.post(API_URL, { email, password: pass });
+
+            if (res.data.success) {
+                const userData = res.data.user;
+                const token = res.data.token;
+
+                // Save to LocalStorage
+                localStorage.setItem("user", JSON.stringify(userData));
+                localStorage.setItem("token", token);
+
+                // Update State
+                setUser(userData);
+                return { success: true };
+            }
+        } catch (error) {
+            console.error("Login Error:", error.response?.data?.message || error.message);
+            return {
+                success: false,
+                message: error.response?.data?.message || "Login failed"
+            };
+        }
     };
 
     const logout = () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
         setUser(null);
-        localStorage.removeItem("nexus_user");
+        window.location.href = "/"; // Redirect to login
     };
 
     return (
         <AuthContext.Provider value={{ user, login, logout, loading }}>
-            {children}
+            {!loading && children}
         </AuthContext.Provider>
     );
 };
