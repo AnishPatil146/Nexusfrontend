@@ -13,9 +13,12 @@ export default function Layout() {
     };
 
     return (
+        // Yahan maine boxes hata kar normal space laga diya hai
         <div className="flex h-screen bg-slate-950 text-white font-sans overflow-hidden">
-            {/* SIDEBAR */}
+
+            {/* SIDEBAR - Yahan 'hidden md:flex' ab sahi chalega */}
             <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col md:flex">
+
                 <div className="p-6 border-b border-slate-800">
                     <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
                         NexusCRM
@@ -64,7 +67,7 @@ export default function Layout() {
                     <button onClick={handleLogout} className="text-slate-400"><LogOut size={20} /></button>
                 </header>
 
-                {/* Dashboard Area */}
+                {/* Dynamic Page Content */}
                 <div className="flex-1 overflow-auto p-4 md:p-8 relative">
                     <Outlet />
                 </div>
