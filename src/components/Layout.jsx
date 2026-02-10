@@ -1,49 +1,76 @@
-import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
-import Sidebar from "./Sidebar";
-import TopBar from "./TopBar";
+import React from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
+import { LogOut, LayoutDashboard, Users, BarChart3, Settings } from 'lucide-react';
 
-const Layout = () => {
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+export default function Layout() {
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
 
     return (
-        // MAIN CONTAINER: Screen height fix, overflow hidden taaki double scroll na aaye
-        <div className="flex h-screen w-full bg-[#0b1120] overflow-hidden font-sans">
+        <div className="flex h-screen bg-slate-950 text-white font-sans overflow-hidden">
+            {/* SIDEBAR */}
+            <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col hidden md:flex">
+                <div className="p-6 border-b border-slate-800">
+                    <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
+                        NexusCRM
+                    </h1>
+                </div>
 
-            {/* 1. LEFT SIDE: Sidebar (Fixed Width) */}
-            <div className="hidden md:flex flex-shrink-0 h-full">
-                <Sidebar />
-            </div>
+                <nav className="flex-1 p-4 space-y-2">
+                    <NavItem icon={<LayoutDashboard size={20} />} label="Dashboard" active />
+                    <NavItem icon={<Users size={20} />} label="Leads" />
+                    <NavItem icon={<BarChart3 size={20} />} label="Analytics" />
+                    <NavItem icon={<Settings size={20} />} label="Settings" />
+                </nav>
 
-            {/* 2. MOBILE OVERLAY (Only visible on small screens) */}
-            {isMobileMenuOpen && (
-                <div className="fixed inset-0 z-50 md:hidden flex">
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)}></div>
-                    <div className="relative animate-in slide-in-from-left h-full">
-                        <Sidebar isMobile={true} closeMobileMenu={() => setIsMobileMenuOpen(false)} />
+                <div className="p-4 border-t border-slate-800">
+                    <div className="flex items-center gap-3 p-3 bg-slate-800 rounded-xl mb-3">
+                        <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center font-bold">
+                            {user?.name?.charAt(0) || "U"}
+                        </div>
+                        <div className="overflow-hidden">
+                            <p className="text-sm font-semibold truncate">{user?.name || "User"}</p>
+                            <p className="text-xs text-slate-400 truncate">{user?.role || "Admin"}</p>
+                        </div>
                     </div>
+                    <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-2 p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors text-sm font-medium"
+                    >
+                        <LogOut size={18} /> Sign Out
+                    </button>
                 </div>
-            )}
+            </aside>
 
-            {/* 3. RIGHT SIDE: TopBar + Main Content */}
-            <div className="flex-1 flex flex-col h-full min-w-0">
+            {/* MAIN CONTENT AREA */}
+            <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
+                {/* Mobile Header */}
+                <header className="md:hidden h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4">
+                    <span className="font-bold text-indigo-500">NexusCRM</span>
+                    <button onClick={handleLogout} className="text-slate-400"><LogOut size={20} /></button>
+                </header>
 
-                {/* A. TopBar Header (Flex Item, will push content down) */}
-                <div className="flex-shrink-0 z-30 relative">
-                    <TopBar toggleSidebar={() => setIsMobileMenuOpen(true)} />
+                {/* Dynamic Page Content */}
+                <div className="flex-1 overflow-auto p-4 md:p-8 relative">
+                    <Outlet />
                 </div>
-
-                {/* B. Scrollable Page Content (Takes remaining space) */}
-                <div className="flex-1 overflow-y-auto bg-[#0b1120] relative scroll-smooth">
-                    {/* Padding wrapper to give content some breathing room from edges */}
-                    <div className="min-h-full w-full">
-                        <Outlet />
-                    </div>
-                </div>
-
-            </div>
+            </main>
         </div>
     );
-};
+}
 
-export default Layout;
+// Helper Component for Sidebar Items
+function NavItem({ icon, label, active }) {
+    return (
+        <button className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${active ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
+            {icon}
+            <span className="font-medium text-sm">{label}</span>
+        </button>
+    );
+}
