@@ -13,11 +13,10 @@ export default function Layout() {
     };
 
     return (
-        // Yahan maine boxes hata kar normal space laga diya hai
         <div className="flex h-screen bg-slate-950 text-white font-sans overflow-hidden">
-
-            {/* SIDEBAR - Yahan 'hidden md:flex' ab sahi chalega */}
-            <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col md:flex">
+            {/* SIDEBAR */}
+            {/* DHYAN DE: Yahan 'hidden' aur 'md:flex' ke beech mein ab normal space hai */}
+            <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col hidden md:flex">
 
                 <div className="p-6 border-b border-slate-800">
                     <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
