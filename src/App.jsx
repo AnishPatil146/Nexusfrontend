@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
-import Layout from './components/Layout'; // <--- YE MISSING THA, AB FIX HAI
+import Layout from './components/Layout';
 import { useAuth } from './auth/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
@@ -18,7 +18,6 @@ function App() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
 
-      {/* Protected Routes */}
       <Route path="/" element={
         <ProtectedRoute>
           <Layout />
