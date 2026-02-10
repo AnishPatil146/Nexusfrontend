@@ -16,7 +16,7 @@ export default function Layout() {
         <div className="flex h-screen bg-slate-950 text-white font-sans overflow-hidden">
             {/* SIDEBAR */}
             {/* DHYAN DE: Yahan 'hidden' aur 'md:flex' ke beech mein ab normal space hai */}
-            <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col hidden md:flex">
+            <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col md:flex">
 
                 <div className="p-6 border-b border-slate-800">
                     <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
