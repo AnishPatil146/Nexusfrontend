@@ -1,82 +1,40 @@
-import Layout from "./components/Layout";
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
-import RoleRoute from "./components/RoleRoute"; // Path check kar lena sahi hai ya nahi
-// --- CONTEXTS (State) ---
-import { AuthProvider, useAuth } from "./auth/AuthContext"; // 👈 Fixed Import
-import { NotificationProvider } from "./auth/NotificationContext";
-import { ToastProvider } from "./auth/ToastContext";
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import Dashboard from './pages/Dashboard'; // Ensure Dashboard exists
+import Layout from './components/Layout'; // <--- YE MISSING THA (Isliye error aaya)
+import { useAuth } from './auth/AuthContext';
 
-// --- COMPONENTS ---
-import Login from "./pages/LoginPage";
-// --- PAGES ---
-import Team from "./pages/Team";
-import Performance from "./pages/Performance";
-import Tasks from "./pages/Tasks";
-import Leads from "./pages/Leads";
-import Invoices from "./pages/Invoices";
-import Reports from "./pages/Reports";
-import Leaves from "./pages/Leaves";
-
-// --- PRIVATE ROUTE COMPONENT ---
-const PrivateRoute = ({ children }) => {
-  const { user, loading } = useAuth(); // 👈 Ab ye sahi chalega
-
-  if (loading) {
-    return (
-      <div className="h-screen bg-[#0b1120] text-white flex items-center justify-center">
-        Loading NexusCRM...
-      </div>
-    );
+// Protected Route: Sirf logged-in users ke liye
+const ProtectedRoute = ({ children }) => {
+  const { user } = useAuth();
+  // Agar user nahi hai aur LocalStorage mein bhi fake token nahi hai -> Login pe bhejo
+  if (!user && !localStorage.getItem("token")) {
+    return <Navigate to="/login" />;
   }
-
-  // Agar user nahi hai to Login pe bhejo, warna page dikhao
-  return user ? children : <Navigate to="/login" />;
+  return children;
 };
 
-export default function App() {
+function App() {
   return (
-    <AuthProvider>
-      <NotificationProvider>
-        <ToastProvider>
+    <Routes>
+      {/* Public Route: Login Page */}
+      <Route path="/login" element={<LoginPage />} />
 
-          {/* Global Toast Notification */}
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              style: { background: '#1e293b', color: '#fff', border: '1px solid #334155' },
-              duration: 4000,
-            }}
-          />
+      {/* Protected Routes: Dashboard etc. (Wrapped in Layout) */}
+      <Route path="/" element={
+        <ProtectedRoute>
+          <Layout />
+        </ProtectedRoute>
+      }>
+        {/* Layout ke andar Dashboard dikhega */}
+        <Route index element={<Dashboard />} />
+      </Route>
 
-          <Routes>
-            {/* 1. Login Page */}
-            <Route path="/login" element={<Login />} />
-
-            {/* 2. Protected Routes (Andar walo ke liye) */}
-            <Route element={<Layout />}>
-
-              {/* Dashboard (Auto-Switch CEO/Manager/Employee) */}
-              <Route path="/" element={<PrivateRoute><RoleRoute /></PrivateRoute>} />
-
-              {/* Other Pages */}
-              <Route path="/team" element={<PrivateRoute><Team /></PrivateRoute>} />
-              <Route path="/performance" element={<PrivateRoute><Performance /></PrivateRoute>} />
-              <Route path="/tasks" element={<PrivateRoute><Tasks /></PrivateRoute>} />
-              <Route path="/leads" element={<PrivateRoute><Leads /></PrivateRoute>} />
-              <Route path="/invoices" element={<PrivateRoute><Invoices /></PrivateRoute>} />
-              <Route path="/reports" element={<PrivateRoute><Reports /></PrivateRoute>} />
-              <Route path="/leaves" element={<PrivateRoute><Leaves /></PrivateRoute>} />
-
-            </Route>
-
-            {/* 3. Catch All (Agar kuch galat type kiya) */}
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-
-        </ToastProvider>
-      </NotificationProvider>
-    </AuthProvider>
+      {/* Agar koi ulti-seedhi link khole -> Home par bhej do */}
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 }
+
+export default App;
