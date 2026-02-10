@@ -15,7 +15,7 @@ export default function Layout() {
     return (
         <div className="flex h-screen bg-slate-950 text-white font-sans overflow-hidden">
             {/* SIDEBAR */}
-            <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col hidden md:flex">
+            <aside className="w-64 bg-slate-900 border-r border-slate-800 flex-col hidden md:flex">
                 <div className="p-6 border-b border-slate-800">
                     <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
                         NexusCRM
@@ -65,7 +65,8 @@ export default function Layout() {
     );
 }
 
-// Helper Component for Sidebar Items
+// Helper Component
+// eslint-disable-next-line react/prop-types
 function NavItem({ icon, label, active }) {
     return (
         <button className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${active ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
