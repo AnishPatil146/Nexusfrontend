@@ -15,7 +15,7 @@ export default function Layout() {
     return (
         <div className="flex h-screen bg-slate-950 text-white font-sans overflow-hidden">
             {/* SIDEBAR */}
-            <aside className="w-64 bg-slate-900 border-r border-slate-800 flex-col hidden md:flex">
+            <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col md:flex">
                 <div className="p-6 border-b border-slate-800">
                     <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
                         NexusCRM
@@ -50,13 +50,11 @@ export default function Layout() {
 
             {/* MAIN CONTENT AREA */}
             <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
-                {/* Mobile Header */}
                 <header className="md:hidden h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4">
                     <span className="font-bold text-indigo-500">NexusCRM</span>
                     <button onClick={handleLogout} className="text-slate-400"><LogOut size={20} /></button>
                 </header>
 
-                {/* Dynamic Page Content */}
                 <div className="flex-1 overflow-auto p-4 md:p-8 relative">
                     <Outlet />
                 </div>
@@ -66,7 +64,6 @@ export default function Layout() {
 }
 
 // Helper Component
-// eslint-disable-next-line react/prop-types
 function NavItem({ icon, label, active }) {
     return (
         <button className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${active ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
